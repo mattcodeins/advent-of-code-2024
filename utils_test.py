@@ -3,37 +3,58 @@ from utils import *
 
 class TestGrid(unittest.TestCase):
     def setUp(self):
-        self.lines = readlines('testdata/grid.txt')
-        self.G = Grid(self.lines, '^', 3)
-        self.assertEqual(self.G.X, (4,6))
+        grid = readlines('testdata/grid.txt', prnt=False)
+        self.G = M(grid)
 
     def test_print(self):
-        self.assertEqual(
-            self.G.__str__(),
-"""....#.....
-.........#
-..........
-..#.......
-.......#..
-..........
-.#..^.....
-........#.
-#.........
-......#...""")
+        self.assertEqual(self.G.__str__(), gp)
 
     def test_get(self):
-        self.assertEqual(self.G[4,0], '#')
+        self.assertEqual(self.G[2,0], 2)
 
-    def test_isupper(self):
-        print()
-        self.assertFalse('FOO'.isupper())
+    def test_set(self):
+        self.G[2,0] = 'X'
+        self.assertEqual(self.G[2,0], 'X')
 
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
+    def test_rotate(self):
+        self.G.rotate()
+        self.assertEqual(self.G.__str__(), grot)
+
+    def test_fliplr(self):
+        self.G.fliplr()
+        self.assertEqual(self.G.__str__(), gfh)
+
+    def test_flipud(self):
+        self.G.flipud()
+        self.assertEqual(self.G.__str__(), gfv)
+
+gp = """\
+..2.
+1...
+...3
+.4..\
+"""
+
+grot = """\
+..1.
+4...
+...2
+.3..\
+"""
+
+gfh = """\
+.2..
+...1
+3...
+..4.\
+"""
+
+gfv = """\
+.4..
+...3
+1...
+..2.\
+"""
 
 if __name__ == '__main__':
     unittest.main()

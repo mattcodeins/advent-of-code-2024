@@ -1,6 +1,6 @@
 from utils import *
 
-lines = readlines('day01/input.txt', prnt=False)
+lines = readlines('day01/input.txt')
 # lines = readlines('day071test.txt')
 
 x = [a[0] for a in lines]

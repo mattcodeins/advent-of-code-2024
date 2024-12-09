@@ -11,7 +11,7 @@ def readlinesb(filename, prnt=False):
         print(res[0])
     return res
 
-def readlines(filename, isstr=False, sep=None, prnt=True, b=False):
+def readlines(filename, prnt=False, sep=None, isstr=False, b=False):
     if b:
         return readlinesb(filename, prnt=prnt)
     with open(filename) as f:
@@ -104,36 +104,113 @@ def binflip(x):
     return ''.join('1' if a == '0' else '0' for a in x)
 
 
-## GRID
-class Grid():
-    def __init__(
-            self,
-            grid:list[list[any]]=None,
-            start=(0,0),
-            dir=0,
-        ):
-        self.G = grid
-        if type(start) != tuple:
-            for i, r in enumerate(self.G):
-                for j, x in enumerate(r):
-                    if x == start:
-                        start = (i,j)
-                        break
-        self.X = start
-        self.D = dir
-        super().__init__()
+## MATRIX
+class M():
+    def __init__(self, inp):
+        if type(inp[0]) == str:
+            inp = [[parsestr(x) for x in r] for r in inp]
+        self.G = inp
+        self.m = len(self.G)
+        self.n = len(self.G[0])
+
+    def _check_oob(self, p):
+        if p[0] < 0 or p[0] >= self.m or p[1] < 0 or p[1] >= self.n:
+            return False
+        return True
 
     def __getitem__(self, p):
-        return self.G[p[0]][p[1]]
+        if self._check_oob(p):
+            return self.G[p[1]][p[0]]
 
     def __setitem__(self, p, v):
-        self.G[p] = v
+        if self._check_oob(p):
+            self.G[p[1]][p[0]] = v
+
+    def __iter__(self):
+        for j in range(self.m):
+            for i in range(self.n):
+                yield V(j,i), self.G[j][i]
 
     def __str__(self):
         return '\n'.join([''.join([str(x) for x in r]) for r in self.G])
 
+    def __add__(self, other):
+        return M([[self.data[i][j] + other.data[i][j] for j in range(len(self.data[0]))] for i in range(len(self.data))])
+
     def rotate(self):
         self.G = list(zip(*self.G[::-1]))
 
+    def flipud(self):
+        self.G = self.G[::-1]
+
+    def fliplr(self):
+        self.G = [r[::-1] for r in self.G]
+
     def step(self, p):
         return (p[0]+self.D[0], p[1]+self.D[1])
+
+class V():
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __getitem__(self, i):
+        if i == 0:
+            return self.x
+        if i == 1:
+            return self.y
+
+    def __setitem__(self, i, v):
+        if i == 0:
+            self.x = v
+        if i == 1:
+            self.y = v
+
+    def __add__(self, other):
+        return V(self.x + other.x, self.y + other.y)
+
+    def __sub__(self, other):
+        return V(self.x - other.x, self.y - other.y)
+
+    def __mul__(self, other):
+        if isinstance(other, V):
+            return V(self.x * other.x, self.y * other.y)
+        return V(self.x * other, self.y * other)
+
+    def __rmul__(self, other):
+        return self.__mul__(other)
+
+    def __truediv__(self, other):
+        if isinstance(other, V):
+            return V(self.x / other.x, self.y / other.y)
+        return V(self.x / other, self.y / other)
+
+    def __floordiv__(self, other):
+        if isinstance(other, V):
+            return V(self.x // other.x, self.y // other.y)
+        return V(self.x // other, self.y // other)
+
+    def __str__(self):
+        return f'({self.x}, {self.y})'
+
+    def __repr__(self):
+        return f'({self.x}, {self.y})'
+
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def __iter__(self):
+        yield self.x
+        yield
+
+    def __len__(self):
+        return 2
+
+    def d(self, other):
+        return abs(self.x - other.x) + abs(self.y - other.y)

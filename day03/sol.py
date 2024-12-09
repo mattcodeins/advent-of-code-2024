@@ -1,7 +1,7 @@
 from utils import *
 import re
 
-lines = readlines('day03/input.txt', b=True, prnt=False)
+lines = readlines('day03/input.txt', b=True)
 # lines = readlines('day03/test.txt')
 
 def solve(p2=False):

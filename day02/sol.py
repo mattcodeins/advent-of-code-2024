@@ -1,6 +1,6 @@
 from utils import *
 
-lines = readlines('day02/input.txt', prnt=False)
+lines = readlines('day02/input.txt')
 # lines = readlines('day02/test.txt')
 
 def solve(p2=False):

@@ -1,6 +1,6 @@
 from utils import *
 
-lines = readlines('day07/input.txt', sep=' ', prnt=False)
+lines = readlines('day07/input.txt', sep=' ')
 # lines = readlines('day07/test.txt', sep=' ')
 
 newlines = []

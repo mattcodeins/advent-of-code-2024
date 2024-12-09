@@ -1,6 +1,6 @@
 from utils import *
 
-lines = readlines('day05/input.txt', prnt=False)
+lines = readlines('day05/input.txt')
 # lines = readlines('day05/test.txt')
 
 orders = lines[0]

@@ -1,6 +1,6 @@
 from utils import *
 
-lines = readlines('day06/input.txt', sep='', prnt=False)
+lines = readlines('day06/input.txt', sep='')
 lines = readlines('day06/test.txt', sep='')
 
 grid = Grid([list(l) for l in lines], '^', '3')

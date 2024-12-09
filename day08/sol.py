@@ -1,6 +1,6 @@
 from utils import *
 
-lines = readlines('day08/input.txt', sep=' ', prnt=False)
+lines = readlines('day08/input.txt', sep=' ')
 # lines = readlines('day08/test.txt', sep=' ')
 g = defaultdict(str) | {(i,j):lines[i][j] for i in range(len(lines)) for j in range(len(lines[0]))}
 

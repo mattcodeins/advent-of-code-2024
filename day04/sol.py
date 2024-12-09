@@ -1,6 +1,6 @@
 from utils import *
 
-lines = readlines('day04/input.txt', prnt=False)
+lines = readlines('day04/input.txt')
 # lines = readlines('day04/test.txt')
 
 m, n = len(lines), len(lines[0])
