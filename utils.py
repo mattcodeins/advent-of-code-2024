@@ -1,7 +1,6 @@
 import math
 from collections import defaultdict, deque
 import copy
-import time
 
 ## INPUT
 def readlinesb(filename, prnt=False):
@@ -24,11 +23,10 @@ def readlines(filename, prnt=False, sep=None, isstr=False, b=False):
             else:
                 r = parseline(l, isstr, sep)
                 res.append(r)
-        if res2:
-            res2.append(res)
-            return res2
+    res = res2 + [res] if res else res
     if prnt:
-        print(res[0])
+        print(f"nlines: {len(res)}")
+        print(res)
     return res
 
 def parseline(l, isstr=False, sep=' '):
@@ -119,17 +117,21 @@ class M():
         return True
 
     def __getitem__(self, p):
+        if type(p) == int:
+            if self._check_oob((p,0)):
+                return self.G[p]
+            return self.G[p]
         if self._check_oob(p):
-            return self.G[p[1]][p[0]]
+            return self.G[p[0]][p[1]]
 
     def __setitem__(self, p, v):
         if self._check_oob(p):
-            self.G[p[1]][p[0]] = v
+            self.G[p[0]][p[1]] = v
 
     def __iter__(self):
         for j in range(self.m):
             for i in range(self.n):
-                yield V(j,i), self.G[j][i]
+                yield V(i,j), self.G[i][j]
 
     def __str__(self):
         return '\n'.join([''.join([str(x) for x in r]) for r in self.G])
@@ -148,6 +150,28 @@ class M():
 
     def step(self, p):
         return (p[0]+self.D[0], p[1]+self.D[1])
+
+    def bfs(self, p, stepcond=None, rescond=None, diag=False, cangoback=False):
+        if not stepcond:
+            stepcond = lambda x: True
+        if not rescond:
+            rescond = lambda x: None
+        q = deque([p])
+        seen = set()
+        res = []
+        while q:
+            for _ in range(len(q)):
+                p = q.popleft()
+                for np in p.steps(diag=diag):
+                    if self[np] and np not in seen:
+                        if stepcond(np,p):
+                            if rescond(np,p):
+                                res.append(np)
+                            q.append(np)
+                        if cangoback:
+                            seen.add(np)
+        return res
+
 
 class V():
     def __init__(self, x, y):
@@ -214,3 +238,10 @@ class V():
 
     def d(self, other):
         return abs(self.x - other.x) + abs(self.y - other.y)
+
+    def steps(self, diag=False):
+        dirs = [(0,1),(1,0),(0,-1),(-1,0)]
+        if diag:
+            dirs += [(1,1),(-1,1),(1,-1),(-1,-1)]
+        for d in dirs:
+            yield self + V(d[0], d[1])

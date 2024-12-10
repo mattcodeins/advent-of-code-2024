@@ -10,11 +10,11 @@ class TestGrid(unittest.TestCase):
         self.assertEqual(self.G.__str__(), gp)
 
     def test_get(self):
-        self.assertEqual(self.G[2,0], 2)
+        self.assertEqual(self.G[0,2], 2)
 
     def test_set(self):
-        self.G[2,0] = 'X'
-        self.assertEqual(self.G[2,0], 'X')
+        self.G[0,2] = 'X'
+        self.assertEqual(self.G[0,2], 'X')
 
     def test_rotate(self):
         self.G.rotate()
