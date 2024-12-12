@@ -23,7 +23,9 @@ def readlines(filename, prnt=False, sep=None, isstr=False, b=False):
             else:
                 r = parseline(l, isstr, sep)
                 res.append(r)
-    res = res2 + [res] if res else res
+    res = res2 + [res] if res2 else res
+    if len(res) == 1:
+        res = res[0]
     if prnt:
         print(f"nlines: {len(res)}")
         print(res)
