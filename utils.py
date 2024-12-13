@@ -1,6 +1,7 @@
 import math
 from collections import defaultdict, deque
 import copy
+import numpy as np
 
 ## INPUT
 def readlinesb(filename, prnt=False):
