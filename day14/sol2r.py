@@ -14,19 +14,6 @@ def printgrid(size, guards):
         print(''.join(row))
     print()
 
-def is_tree(ps):
-    c = 0
-    s = set(ps)
-    for i in range(size.x):
-        for j in range(size.y):
-            if V(i,j) in s:
-                c += 1
-                if c == 10:
-                    return True
-            else:
-                c = 0
-    return False
-
 ps, vs = [], []
 for p,v in inp:
     p = V(*p[2:].split(','))
@@ -35,11 +22,16 @@ for p,v in inp:
     vs.append(v)
 
 for n in range(1, 10000):
+    c = defaultdict(int)
+    prnt = True
     for i, p in enumerate(ps):
         v = vs[i]
         p.x = (p.x + v.x) % size.x
         p.y = (p.y + v.y) % size.y
-    if is_tree(ps):
+        c[p] += 1
+        if c[p] > 1:
+            prnt = False
+    if prnt:
         printgrid(size, ps)
         print(n)
         break

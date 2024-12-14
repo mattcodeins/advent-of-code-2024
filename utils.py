@@ -178,8 +178,8 @@ class M():
 
 class V():
     def __init__(self, x, y):
-        self.x = x
-        self.y = y
+        self.x = int(x) if type(x) == str else x
+        self.y = int(y) if type(y) == str else y
 
     def __getitem__(self, i):
         if i == 0:
