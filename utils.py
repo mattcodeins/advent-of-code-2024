@@ -132,8 +132,8 @@ class M():
             self.G[p[0]][p[1]] = v
 
     def __iter__(self):
-        for j in range(self.m):
-            for i in range(self.n):
+        for j in range(self.n):
+            for i in range(self.m):
                 yield V(i,j), self.G[i][j]
 
     def __str__(self):
