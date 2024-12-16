@@ -242,9 +242,26 @@ class V():
     def d(self, other):
         return abs(self.x - other.x) + abs(self.y - other.y)
 
-    def steps(self, diag=False):
-        dirs = [(0,1),(1,0),(0,-1),(-1,0)]
+    def steps(self, diag=False, included=False):
+        dirs = [V(0,1),V(1,0),V(0,-1),V(-1,0)]
         if diag:
-            dirs += [(1,1),(-1,1),(1,-1),(-1,-1)]
+            dirs += [V(1,1),V(-1,1),V(1,-1),V(-1,-1)]
         for d in dirs:
-            yield self + V(d[0], d[1])
+            if included:
+                yield self + d, d
+            else:
+                yield self + d
+
+def dijkstras(G, start, end):
+    q = [(0, start)]
+    seen = set()
+    while q:
+        d, p = q.pop(0)
+        if p == end:
+            return d
+        if p in seen:
+            continue
+        seen.add(p)
+        for np in G[p]:
+            q.append((d+G[p][np], np))
+        q.sort()
