@@ -11,10 +11,12 @@ for i, x in G:
 
 q = [(0, start, V(0,1))]
 seen = set()
+prev = {(0,start):{start}}
 while q:
     d, p, dir = q.pop(0)
     if G[p] == 'E':
         print(d)
+        print(len(prev[(d,p)]))
         break
     if (p,dir) in seen:
         continue
@@ -22,8 +24,7 @@ while q:
     for x, ndir in p.steps(included=True):
         if G[x] == '#':
             continue
-        if dir == ndir:
-            q.append((d+1, x, ndir))
-        else:
-            q.append((d+1001, x, ndir))
+        nd = d+1 if dir == ndir else d+1001
+        prev[(nd,x)] = prev.get((nd,x),{x}) | prev[(d,p)]
+        q.append((nd, x, ndir))
     q.sort(key=lambda x: x[0])
